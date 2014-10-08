@@ -1,0 +1,108 @@
+package org.jackyonline.algorithm;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.function.Function;
+
+/**
+ * @target 1.1 旋转字符串
+ * @问题描述 给定一个字符串，要求把字符串前面的若干个字符移动到字符串的尾部，如把字符串“abcdef”前面的2个字符'a'和'b'移动到字符串的尾部，
+ *       使得原字符串变成字符串“cdefab”。请写一个函数完成此功能，要求对长度为n的字符串操作的时间复杂度为 O(n)，空间复杂度为 O(1)。
+ * @author Jacky_Chen
+ * 
+ */
+public class RotateString {
+	private static char[] chars1 = { 'a', 'b', 'c', 'd', 'e', 'f', 'i', 'j',
+			'k', 'l' };
+	private static char[] chars2 = { 'a', 'b', 'c', 'd', 'e', 'f', 'i', 'j',
+		'k', 'l' };
+
+	public static void main(String[] args) {
+
+		rotateString(chars1, chars1.length, 2);
+		System.out.println("---------------方法1--------------------");
+		System.out.println("---------------chars1--------------------");
+		for (int i = 0; i < chars1.length; i++) {
+			System.out.print(chars1[i] + " ");
+		}
+		System.out.println();
+		System.out.println("---------------方法2--------------------");
+		System.out.println("---------------chars2--------------------");
+		reverseString(chars2, 0, chars2.length);
+//		for (int i = 0; i < chars2.length; i++) {
+//			System.out.print(chars2[i] + " ");
+//		}
+	}
+
+	/**
+	 * 旋转字符串
+	 * 
+	 * @param orgin
+	 *            初始字符数组
+	 * @param position
+	 *            移动到的位置
+	 */
+	private static void function(char[] orgin, int position) {
+		char f = orgin[0];
+		for (int i = 1; i < position; i++) {
+			orgin[i - 1] = orgin[i];
+		}
+		orgin[position - 1] = f;
+	}
+
+	/**
+	 * 增加一个参数，表示前几个数移动到最后一位上。
+	 * 
+	 * @param orgin
+	 * @param position
+	 * @param nums
+	 * 
+	 *            分析： 针对长度为n的字符串来说，假设需要移动m个字符到字符串的尾部，那么总共需要 m*n 次操作，
+	 *            同时设立一个变量保存第一个字符，如此，时间复杂度为O(m * n)，空间复杂度为O(1)，空间
+	 *            复杂度符合题目要求，但时间复杂度不符合，所以，我们得需要寻找其他更好的办法来降低时间复杂度。
+	 * 
+	 *            时间复杂度为O(m * n) 空间复杂度为O(1)
+	 */
+	private static void rotateString(char[] orgin, int position, int nums) {
+		while (nums-- > 0) {
+			function(orgin, position);
+		}
+	}
+
+	/**
+	 * 翻转字符串  这个方法Java中已经封装并且提供了，就在Arrays.sort(a, fromIndex, toIndex)方法中
+	 * 
+	 * @param orgin
+	 *            原始字符串
+	 * @param from
+	 *            翻转起始位置
+	 * @param to
+	 *            翻转最终位置
+	 */
+	private static void reverseString(char[] orgin, int from, int to) {
+		// 首要条件在于起始和最终位置不能小于0并且不能超过数组长度
+		if (from >= 0 && to <= orgin.length) {
+			while(from <= to) {
+				char temp = orgin[from];
+				orgin[from] = orgin[to-1];
+				orgin[to-1] = temp;
+			}
+		}
+		
+		for(int i=0; i<orgin.length; i++) {
+			System.out.print(orgin[i]+" ");
+		}
+		
+
+	}
+	private static void leftRotateString(char[] orgin,int n,int m)
+	{
+	    m %= n;               //若要左移动大于n位，那么和%n 是等价的
+
+	    reverseString(orgin, 0, m); //反转[0..m - 1]，套用到上面举的例子中，就是X->X^T，即 abc->cba
+	    reverseString(orgin, m, n); //反转[m..n - 1]，例如Y->Y^T，即 def->fed
+	    reverseString(orgin, 0, n); //反转[0..n - 1]，即如整个反转，(X^TY^T)^T=YX，即 cbafed->defabc。
+	}
+	
+
+}
